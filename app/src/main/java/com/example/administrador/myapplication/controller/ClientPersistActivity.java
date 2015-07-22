@@ -1,5 +1,6 @@
 package com.example.administrador.myapplication.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -40,7 +41,9 @@ public class ClientPersistActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.menuSave){
             Client client = bindClient();
             client.save();
-            Toast.makeText(ClientPersistActivity.this,Client.getAll().toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(ClientPersistActivity.this,Client.getAll().toString(), Toast.LENGTH_LONG).show();
+            Intent goToMainActivity = new Intent(ClientPersistActivity.this, MainActivity.class);
+            startActivity(goToMainActivity);
         }
         return super.onOptionsItemSelected(item);
     }
