@@ -11,4 +11,9 @@
     <string name="phone">Telefone</string>
     <string name="address">Endereço</string>
     <string name="save">Salvar</string>
+    <string name="required_field">Campo Obrigatório!</string>
+    <string name="success">Sucesso!</string>
+    <string name="delete">Deletar</string>
+    <string name="edit">Editar</string>
+    <string name="deleted">Excluído!</string>
 </resources>
