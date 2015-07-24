@@ -16,4 +16,8 @@
     <string name="delete">Deletar</string>
     <string name="edit">Editar</string>
     <string name="deleted">Excluído!</string>
+    <string name="confirmDelete">Gostaria de deletar?</string>
+    <string name="confirm">Confirmação da exclusão</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 </resources>
