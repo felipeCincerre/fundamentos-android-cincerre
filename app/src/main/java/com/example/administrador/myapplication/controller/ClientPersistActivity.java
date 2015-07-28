@@ -1,6 +1,7 @@
 package com.example.administrador.myapplication.controller;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.administrador.myapplication.R;
 import com.example.administrador.myapplication.model.entities.Client;
+import com.example.administrador.myapplication.model.entities.ClientAddress;
+import com.example.administrador.myapplication.model.services.CepService;
 import com.example.administrador.myapplication.util.FormHelper;
 
 /**
@@ -24,18 +28,19 @@ public class ClientPersistActivity extends AppCompatActivity {
     private EditText editTextAge;
     private EditText editTextPhone;
     private EditText editTextAddress;
+    private EditText editTextCep;
+    private Button buttonFind;
     private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_persist_client);
+        bindFields();
+        getParameters();
+    }
 
-        editTextName = (EditText) findViewById(R.id.editTextName);
-        editTextAge = (EditText) findViewById(R.id.editTextAge);
-        editTextPhone = (EditText) findViewById(R.id.editTextPhone);
-        editTextAddress = (EditText) findViewById(R.id.editTextAddress);
-
+    private void getParameters() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             client = (Client) extras.getParcelable(CLIENT_PARAM);
@@ -44,7 +49,25 @@ public class ClientPersistActivity extends AppCompatActivity {
             }
             bindForm(client);
         }
+    }
 
+    private void bindFields() {
+        editTextName = (EditText) findViewById(R.id.editTextName);
+        editTextAge = (EditText) findViewById(R.id.editTextAge);
+        editTextPhone = (EditText) findViewById(R.id.editTextPhone);
+        editTextAddress = (EditText) findViewById(R.id.editTextAddress);
+        editTextCep = (EditText) findViewById(R.id.editTextCep);
+        bindButtonFindCep();
+    }
+
+    private void bindButtonFindCep() {
+        buttonFind = (Button) findViewById(R.id.buttonFind);
+        buttonFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new getAddressByCep().execute(editTextCep.getText().toString());
+            }
+        });
     }
 
     @Override
@@ -85,4 +108,12 @@ public class ClientPersistActivity extends AppCompatActivity {
         editTextAddress.setText(client.getAddress());
     }
 
+    private class getAddressByCep extends AsyncTask<String, Void, ClientAddress>{
+
+        @Override
+        protected ClientAddress doInBackground(String... params) {
+            return CepService.getAddressBy(params[0]);
+        }
+
+    }
 }
