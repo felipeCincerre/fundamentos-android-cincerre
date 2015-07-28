@@ -18,7 +18,12 @@ public class Client implements Serializable, Parcelable {
     private String name;
     private Integer age;
     private String phone;
-    private String address;
+    private String cep;
+    private String tipoDeLogradouro;
+    private String logradouro;
+    private String bairro;
+    private String cidade;
+    private String estado;
 
     public Client() {
         super();
@@ -46,12 +51,52 @@ public class Client implements Serializable, Parcelable {
         this.age = age;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getTipoDeLogradouro() {
+        return tipoDeLogradouro;
+    }
+
+    public void setTipoDeLogradouro(String tipoDeLogradouro) {
+        this.tipoDeLogradouro = tipoDeLogradouro;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public String getPhone() {
@@ -89,7 +134,14 @@ public class Client implements Serializable, Parcelable {
         if (name != null ? !name.equals(client.name) : client.name != null) return false;
         if (age != null ? !age.equals(client.age) : client.age != null) return false;
         if (phone != null ? !phone.equals(client.phone) : client.phone != null) return false;
-        return !(address != null ? !address.equals(client.address) : client.address != null);
+        if (cep != null ? !cep.equals(client.cep) : client.cep != null) return false;
+        if (tipoDeLogradouro != null ? !tipoDeLogradouro.equals(client.tipoDeLogradouro) : client.tipoDeLogradouro != null)
+            return false;
+        if (logradouro != null ? !logradouro.equals(client.logradouro) : client.logradouro != null)
+            return false;
+        if (bairro != null ? !bairro.equals(client.bairro) : client.bairro != null) return false;
+        if (cidade != null ? !cidade.equals(client.cidade) : client.cidade != null) return false;
+        return !(estado != null ? !estado.equals(client.estado) : client.estado != null);
 
     }
 
@@ -99,7 +151,12 @@ public class Client implements Serializable, Parcelable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (age != null ? age.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (cep != null ? cep.hashCode() : 0);
+        result = 31 * result + (tipoDeLogradouro != null ? tipoDeLogradouro.hashCode() : 0);
+        result = 31 * result + (logradouro != null ? logradouro.hashCode() : 0);
+        result = 31 * result + (bairro != null ? bairro.hashCode() : 0);
+        result = 31 * result + (cidade != null ? cidade.hashCode() : 0);
+        result = 31 * result + (estado != null ? estado.hashCode() : 0);
         return result;
     }
 
@@ -126,7 +183,12 @@ public class Client implements Serializable, Parcelable {
         dest.writeString(name == null ? "" : name);
         dest.writeInt(age == null ? -1 : age);
         dest.writeString(phone == null ? "" : phone);
-        dest.writeString(address == null ? "" : address);
+        dest.writeString(cep == null ? "" : cep);
+        dest.writeString(tipoDeLogradouro == null ? "" : tipoDeLogradouro);
+        dest.writeString(logradouro == null ? "" : logradouro);
+        dest.writeString(bairro == null ? "" : bairro);
+        dest.writeString(cidade == null ? "" : cidade);
+        dest.writeString(estado == null ? "" : estado);
     }
 
     private void readToParcel(Parcel in) {
@@ -136,7 +198,12 @@ public class Client implements Serializable, Parcelable {
         int partialAge = in.readInt();
         age = partialAge == -1 ? null : partialAge;
         phone = in.readString();
-        address = in.readString();
+        cep = in.readString();
+        tipoDeLogradouro = in.readString();
+        logradouro = in.readString();
+        bairro = in.readString();
+        cidade = in.readString();
+        estado = in.readString();
     }
 
     public static final Parcelable.Creator<Client> CREATOR = new Parcelable.Creator<Client>() {

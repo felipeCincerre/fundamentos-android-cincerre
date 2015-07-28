@@ -1,10 +1,8 @@
 package com.example.administrador.myapplication.controller;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +17,8 @@ import com.example.administrador.myapplication.model.entities.ClientAddress;
 import com.example.administrador.myapplication.model.services.CepService;
 import com.example.administrador.myapplication.util.FormHelper;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by Administrador on 21/07/2015.
  */
@@ -27,7 +27,11 @@ public class ClientPersistActivity extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextAge;
     private EditText editTextPhone;
-    private EditText editTextAddress;
+    private EditText editTextTipoDeLogradouro;
+    private EditText editTextLogradouro;
+    private EditText editTextBairro;
+    private EditText editTextCidade;
+    private EditText editTextEstado;
     private EditText editTextCep;
     private Button buttonFind;
     private Client client;
@@ -44,7 +48,7 @@ public class ClientPersistActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             client = (Client) extras.getParcelable(CLIENT_PARAM);
-            if(client==null){
+            if (client == null) {
                 throw new IllegalArgumentException();
             }
             bindForm(client);
@@ -55,8 +59,12 @@ public class ClientPersistActivity extends AppCompatActivity {
         editTextName = (EditText) findViewById(R.id.editTextName);
         editTextAge = (EditText) findViewById(R.id.editTextAge);
         editTextPhone = (EditText) findViewById(R.id.editTextPhone);
-        editTextAddress = (EditText) findViewById(R.id.editTextAddress);
         editTextCep = (EditText) findViewById(R.id.editTextCep);
+        editTextTipoDeLogradouro = (EditText) findViewById(R.id.editTextTipoDeLogradouro);
+        editTextLogradouro = (EditText) findViewById(R.id.editTextLogradouro);
+        editTextBairro = (EditText) findViewById(R.id.editTextBairro);
+        editTextEstado = (EditText) findViewById(R.id.editTextEstado);
+        editTextCidade = (EditText) findViewById(R.id.editTextCidade);
         bindButtonFindCep();
     }
 
@@ -65,7 +73,21 @@ public class ClientPersistActivity extends AppCompatActivity {
         buttonFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new getAddressByCep().execute(editTextCep.getText().toString());
+                AsyncTask<String, Void, ClientAddress> task = new GetAddressByCep().execute(editTextCep.getText().toString());
+                ClientAddress address = null;
+                try {
+                    address = task.get();
+                    editTextCep.setText(address.getCep());
+                    editTextTipoDeLogradouro.setText(address.getTipoDeLogradouro());
+                    editTextLogradouro.setText(address.getLogradouro());
+                    editTextBairro.setText(address.getBairro());
+                    editTextCidade.setText(address.getCidade());
+                    editTextEstado.setText(address.getEstado());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -79,41 +101,64 @@ public class ClientPersistActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menuSave) {
-            if (FormHelper.requireValidate(ClientPersistActivity.this, editTextName, editTextAge, editTextPhone, editTextAddress)) {
+            if (FormHelper.requireValidate(ClientPersistActivity.this, editTextName, editTextAge, editTextPhone)) {
                 bindClient();
                 client.save();
                 ClientPersistActivity.this.finish();
                 Toast.makeText(ClientPersistActivity.this, ClientPersistActivity.this.getString(R.string.success), Toast.LENGTH_LONG).show();
                 //Intent goToMainActivity = new Intent(ClientPersistActivity.this, ClientListActivity.class);
                 //startActivity(goToMainActivity);
+                finish();
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void bindClient() {
-        if(client == null){
+        if (client == null) {
             client = new Client();
         }
         client.setName(editTextName.getText().toString());
         client.setAge(Integer.valueOf(editTextAge.getText().toString()));
         client.setPhone(editTextPhone.getText().toString());
-        client.setAddress(editTextAddress.getText().toString());
+        client.setCep(editTextCep.getText().toString());
+        client.setTipoDeLogradouro(editTextTipoDeLogradouro.getText().toString());
+        client.setLogradouro(editTextLogradouro.getText().toString());
+        client.setBairro(editTextBairro.getText().toString());
+        client.setCidade(editTextCidade.getText().toString());
+        client.setEstado(editTextEstado.getText().toString());
     }
 
     private void bindForm(Client client) {
         editTextName.setText(client.getName());
         editTextAge.setText(client.getAge().toString());
         editTextPhone.setText(client.getPhone());
-        editTextAddress.setText(client.getAddress());
+        editTextCep.setText(client.getCep());
+        editTextTipoDeLogradouro.setText(client.getTipoDeLogradouro());
+        editTextLogradouro.setText(client.getLogradouro());
+        editTextBairro.setText(client.getBairro());
+        editTextCidade.setText(client.getCidade());
+        editTextEstado.setText(client.getEstado());
     }
 
-    private class getAddressByCep extends AsyncTask<String, Void, ClientAddress>{
+    private class GetAddressByCep extends AsyncTask<String, Void, ClientAddress> {
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(ClientPersistActivity.this);
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.show();
+        }
 
         @Override
         protected ClientAddress doInBackground(String... params) {
             return CepService.getAddressBy(params[0]);
         }
 
+        @Override
+        protected void onPostExecute(ClientAddress clientAddress) {
+            progressDialog.dismiss();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.administrador.myapplication.model.services;
 
 import com.example.administrador.myapplication.model.entities.ClientAddress;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,12 +14,13 @@ import java.net.URL;
  */
 public final class CepService {
     private static final String URL = "https://correiosapi.apphb.com/cep/";
-    ClientAddress clientAddress = null;
+
     private CepService() {
         super();
     }
 
     public static ClientAddress getAddressBy(String cep) {
+        ClientAddress clientAddress = null;
         try {
             URL url = new URL(URL + cep);
             final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -30,13 +32,12 @@ public final class CepService {
             }
             InputStream inputStream = conn.getInputStream();
 
-            //ObjectMapper.objectMapper = new ObjectMapper();
-            //clientAddress = objectMapper.readValue(inputStream, ClientAddress.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            clientAddress = objectMapper.readValue(inputStream, ClientAddress.class);
             conn.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //return clientAddress;
-        return null;
+        return clientAddress;
     }
 }

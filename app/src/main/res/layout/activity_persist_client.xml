@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
 <EditText
     android:id="@+id/editTextName"
     android:layout_width="match_parent"
@@ -23,10 +27,34 @@
         android:hint="@string/phone" />
 
     <EditText
-        android:id="@+id/editTextAddress"
+        android:id="@+id/editTextTipoDeLogradouro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/address"/>
+        android:hint="@string/tipoLogradouro"/>
+
+    <EditText
+        android:id="@+id/editTextLogradouro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/logradouro"/>
+
+    <EditText
+        android:id="@+id/editTextBairro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/bairro"/>
+
+    <EditText
+        android:id="@+id/editTextCidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/cidade"/>
+
+    <EditText
+        android:id="@+id/editTextEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/estado"/>
 
     <EditText
         android:id="@+id/editTextCep"
@@ -40,3 +68,5 @@
         android:layout_height="wrap_content"
         android:text="@string/find"/>
 </LinearLayout>
+
+</ScrollView>
