@@ -73,21 +73,7 @@ public class ClientPersistActivity extends AppCompatActivity {
         buttonFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AsyncTask<String, Void, ClientAddress> task = new GetAddressByCep().execute(editTextCep.getText().toString());
-                ClientAddress address = null;
-                try {
-                    address = task.get();
-                    editTextCep.setText(address.getCep());
-                    editTextTipoDeLogradouro.setText(address.getTipoDeLogradouro());
-                    editTextLogradouro.setText(address.getLogradouro());
-                    editTextBairro.setText(address.getBairro());
-                    editTextCidade.setText(address.getCidade());
-                    editTextEstado.setText(address.getEstado());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
+                new GetAddressByCep().execute(editTextCep.getText().toString());
             }
         });
     }
@@ -158,6 +144,12 @@ public class ClientPersistActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ClientAddress clientAddress) {
+            editTextCep.setText(clientAddress.getCep());
+            editTextTipoDeLogradouro.setText(clientAddress.getTipoDeLogradouro());
+            editTextLogradouro.setText(clientAddress.getLogradouro());
+            editTextBairro.setText(clientAddress.getBairro());
+            editTextCidade.setText(clientAddress.getCidade());
+            editTextEstado.setText(clientAddress.getEstado());
             progressDialog.dismiss();
         }
     }
