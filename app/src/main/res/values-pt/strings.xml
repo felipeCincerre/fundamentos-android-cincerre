@@ -29,4 +29,7 @@
     <string name="cidade">Cidade</string>
     <string name="estado">Estado</string>
     <string name="loading">Carregando</string>
+    <string name="invalid">Login ou Senha inválidos</string>
+    <string name="cepNecessary">O campo CEP é necessário para fazer a pesquisa!</string>
+    <string name="notFound">CEP não encontrado ou problema com a internet!</string>
 </resources>

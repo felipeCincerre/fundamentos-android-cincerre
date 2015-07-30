@@ -28,4 +28,7 @@
     <string name="cidade">Cidade</string>
     <string name="estado">Estado</string>
     <string name="loading">Loading</string>
+    <string name="invalid">Login or Password invalid</string>
+    <string name="cepNecessary">The field CEP is necessary to make the search</string>
+    <string name="notFound">CEP not found or problem with internet!</string>
 </resources>

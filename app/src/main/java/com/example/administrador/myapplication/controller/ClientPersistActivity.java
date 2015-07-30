@@ -86,12 +86,33 @@ public class ClientPersistActivity extends AppCompatActivity {
         editTextAge = (EditText) findViewById(R.id.editTextAge);
         editTextPhone = (EditText) findViewById(R.id.editTextPhone);
         editTextCep = (EditText) findViewById(R.id.editTextCep);
+        editTextCep.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0);
+        editTextCep.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (editTextCep.getRight() - editTextCep.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (editTextCep.getText().toString().equals("")) {
+                            Toast.makeText(ClientPersistActivity.this, ClientPersistActivity.this.getString(R.string.cepNecessary), Toast.LENGTH_LONG).show();
+                        } else {
+                            new GetAddressByCep().execute(editTextCep.getText().toString());
+                        }
+                    }
+                }
+                return false;
+            }
+        });
         editTextTipoDeLogradouro = (EditText) findViewById(R.id.editTextTipoDeLogradouro);
         editTextLogradouro = (EditText) findViewById(R.id.editTextLogradouro);
         editTextBairro = (EditText) findViewById(R.id.editTextBairro);
         editTextEstado = (EditText) findViewById(R.id.editTextEstado);
         editTextCidade = (EditText) findViewById(R.id.editTextCidade);
-        bindButtonFindCep();
+        //bindButtonFindCep();
     }
 
     /**
@@ -122,15 +143,15 @@ public class ClientPersistActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void bindButtonFindCep() {
-        buttonFind = (Button) findViewById(R.id.buttonFind);
-        buttonFind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new GetAddressByCep().execute(editTextCep.getText().toString());
-            }
-        });
-    }
+    //private void bindButtonFindCep() {
+    //    buttonFind = (Button) findViewById(R.id.buttonFind);
+    //    buttonFind.setOnClickListener(new View.OnClickListener() {
+    //        @Override
+    //        public void onClick(View v) {
+    //            new GetAddressByCep().execute(editTextCep.getText().toString());
+    //        }
+    //    });
+    //}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,12 +219,16 @@ public class ClientPersistActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ClientAddress clientAddress) {
-            editTextCep.setText(clientAddress.getCep());
-            editTextTipoDeLogradouro.setText(clientAddress.getTipoDeLogradouro());
-            editTextLogradouro.setText(clientAddress.getLogradouro());
-            editTextBairro.setText(clientAddress.getBairro());
-            editTextCidade.setText(clientAddress.getCidade());
-            editTextEstado.setText(clientAddress.getEstado());
+            if (clientAddress == null) {
+                Toast.makeText(ClientPersistActivity.this, ClientPersistActivity.this.getString(R.string.notFound), Toast.LENGTH_LONG).show();
+            } else {
+                editTextCep.setText(clientAddress.getCep());
+                editTextTipoDeLogradouro.setText(clientAddress.getTipoDeLogradouro());
+                editTextLogradouro.setText(clientAddress.getLogradouro());
+                editTextBairro.setText(clientAddress.getBairro());
+                editTextCidade.setText(clientAddress.getCidade());
+                editTextEstado.setText(clientAddress.getEstado());
+            }
             progressDialog.dismiss();
         }
     }

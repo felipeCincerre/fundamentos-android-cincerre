@@ -1,5 +1,9 @@
 package com.example.administrador.myapplication.model.services;
 
+import android.widget.Toast;
+
+import com.example.administrador.myapplication.R;
+import com.example.administrador.myapplication.controller.ClientPersistActivity;
 import com.example.administrador.myapplication.model.entities.ClientAddress;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,7 +17,7 @@ import java.net.URL;
  * Created by Administrador on 27/07/2015.
  */
 public final class CepService {
-    private static final String URL = "https://correiosapi.apphb.com/cep/";
+    private static final String URL = "http://correiosapi.apphb.com/cep/";
 
     private CepService() {
         super();
@@ -28,7 +32,7 @@ public final class CepService {
             conn.setRequestProperty("Accept", "application/json");
             int responseCode = conn.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new RuntimeException("Error code: " + responseCode);
+                return null;
             }
             InputStream inputStream = conn.getInputStream();
 
