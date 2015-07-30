@@ -8,5 +8,5 @@
         android:id="@+id/menuAdd"
         android:title="@string/add"
         app:showAsAction="always"
-        android:icon="@drawable/ic_add"/>
+        android:icon="@drawable/ic_share"/>
 </menu>
